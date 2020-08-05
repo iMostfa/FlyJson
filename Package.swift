@@ -8,14 +8,18 @@ let package = Package(
     ],
     dependencies: [
         // 💧 A server-side Swift web framework.
-        .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0")
+      .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
+      .package(url: "https://github.com/jpsim/SourceKitten.git", .upToNextMinor(from: "0.21.2")),
+         .package(url: "https://github.com/vapor/leaf.git", from: "4.0.0-rc"),
+
     ],
     targets: [
         .target(
             name: "App",
-            dependencies: [
-                .product(name: "Vapor", package: "vapor")
-            ],
+            dependencies:[
+              .product(name: "SourceKittenFramework", package: "SourceKitten"),
+              .product(name: "Leaf", package: "leaf"),
+              .product(name: "Vapor", package: "vapor")],
             swiftSettings: [
                 // Enable better optimizations when building in Release configuration. Despite the use of
                 // the `.unsafeFlags` construct required by SwiftPM, this flag is recommended for Release
