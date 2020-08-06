@@ -6,10 +6,10 @@ func routes(_ app: Application) throws {
     app.get { req -> EventLoopFuture<View> in
 
 
-       return req.view.render("index")
+      return req.view.render("index",["jsonCode": "Your Json will appear here"])
        }
 
-  app.post("toJson") { (req) -> String  in
+  app.post("toJson") { (req) ->  EventLoopFuture<View>  in
 
     let code = try req.content.decode(SwiftCode.self)
 
@@ -19,45 +19,26 @@ func routes(_ app: Application) throws {
       .map{JSON.Builder($0)}
       .first!
     let  result =  try builder.build()
-
-    return result
+        return req.view.render("index",["jsonCode": result,
+                                    "swiftCode": code.swift ])
 
 
   }
-  
-
-    app.get("hello") { req -> String in
 
 
-
-      return  "!"
-    }
-
-  app.get("testKitten") { req -> String  in
-    //    let k = (SwiftDocs(file: file, arguments: ["-j4", file.path!])!)
-
-    let file = File(path: "/Users/mostfa/Downloads/file.swift")!
-    let index = file.contents.index(file.contents.startIndex, offsetBy: 10)
-
-    return file.contents[index].description
-
-  }
-
-  app.get("helllo", ":name") { req -> String in
+  app.get("debug", ":name") { req -> String in
 
     if  let name = req.parameters.get("name") {
 
       let file = File(path: "/Users/mostfa/Downloads/file.swift")!
 
-      let index = file.contents.index(file.contents.startIndex, offsetBy: Int(req.parameters.get("name") as! String)!)
+      let index = file.contents.index(file.contents.startIndex, offsetBy: Int(req.parameters.get("name")!)!)
 //
 //      print(file.contents[index].description)
 
       return file.contents[index].description + "\n \n \n" + file.contents + "\n \n \n \n" + (try! SourceKittenFramework.Structure(file: file).description)
       let me =  try! JSONDecoder().decode(SourceKittenResponse.self, from: ((try! SourceKittenFramework.Structure(file: file).description).data(using: .utf8))!)
-//      let mirror =  Mirror(reflecting: me)
 
-   //   return me.models.first!.propertiesO.map{$0.name}.reduce("", {$0 + "\n" + $1})
 
 
     } else {
@@ -67,7 +48,7 @@ func routes(_ app: Application) throws {
 
   }
 
-  app.get("hello", ":name") { req -> String in
+  app.get("resultOnly", ":name") { req -> String in
 
    var builder =  try SKittenParser(for: File(path: "/Users/mostfa/Downloads/file.swift")!)
        .decode()
@@ -94,4 +75,18 @@ func routes(_ app: Application) throws {
 
 struct SwiftCode: Codable {
   var swift: String
+
 }
+
+
+
+
+
+//"""
+//
+//struct Mostfa {
+//var name: String = "Mostfa"
+//var age: String = "30"
+//}
+//
+//"""

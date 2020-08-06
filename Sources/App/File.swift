@@ -56,6 +56,9 @@ struct SKittenParser  {
       var properties = [JsonSchema.Property]()
       for (index,property) in model.propertiesO.enumerated() {
         let nextIndex = index + 1
+
+        guard property.type != nil else { throw SKittenError.typeNotProvided(key: property.name!) }
+
         if nextIndex <= model.propertiesO.count - 1 {
 
           let value =  defaultValueFinder(firstIndex: property.chars,
@@ -169,6 +172,7 @@ enum SKittenError: Error {
   case fileInitliazation
   case jsonInitlization
   case defaultStringNotFound(inValue: String)
+  case typeNotProvided(key: String)
 
 }
 

@@ -35,8 +35,13 @@ extension JSON {
         return try builder.add(key: property.name, value: property.value, type: property.type)
       })
 
+      var json = try final!.closeJson().result()
 
-      return try final!.closeJson().result()
+      if json.last != "}" {
+        json.append("}")
+      } //temp fix
+
+      return json
 
     }
 
@@ -49,8 +54,9 @@ extension JSON {
 
     mutating func closeJson() throws -> JSON.Builder {
       try checkStarted()
-      _ = self.current!.removeLast()
-
+      if self.current!.last! == "," {
+        _ = self.current!.removeLast()
+      }
       return self
     }
 
@@ -71,7 +77,9 @@ extension JSON {
       case .arrayString:
         throw JSON.BuilderError.unsupportedType(type: "not ready yet")
       case .Int:
-        return try self.add(key: key, value: Int(value))
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+
+       return try self.add(key: key, value: Int(trimmed))
       case .arrayInt:
         throw JSON.BuilderError.unsupportedType(type: "not ready yet")
       case .double:
@@ -79,7 +87,9 @@ extension JSON {
       case .arrayDouble:
         throw JSON.BuilderError.unsupportedType(type: "not ready yet")
       case .bool:
-        return try add(key: key, value: Bool(value.removingAllWhitespaces()))
+        let v = value.removingAllWhitespaces().description
+        let value = (value as NSString).boolValue
+        return try add(key: key, value: value)
 
       }
 
