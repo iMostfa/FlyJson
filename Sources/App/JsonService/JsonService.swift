@@ -15,8 +15,9 @@ protocol JsonService {
 
 
 enum JsonServiceError: Error {
-  case unDefinded
-  case never
+    case unDefinded
+    case never
+    case decodingError(error: Error)
 }
 
 

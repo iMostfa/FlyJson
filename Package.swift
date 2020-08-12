@@ -8,9 +8,11 @@ let package = Package(
     ],
     dependencies: [
         // 💧 A server-side Swift web framework.
-      .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
-      .package(url: "https://github.com/jpsim/SourceKitten.git", .upToNextMinor(from: "0.21.2")),
-         .package(url: "https://github.com/vapor/leaf.git", from: "4.0.0-rc"),
+        .package(url: "https://github.com/jpsim/SourceKitten.git", .upToNextMinor(from: "0.21.2")),
+        .package(url: "https://github.com/vapor/leaf.git", from: "4.0.0-rc"),
+        .package(url: "https://github.com/grpc/grpc-swift.git", .exact("1.0.0-alpha.17")),
+        .package(url: "https://github.com/iMostfa/vapor.git", .branch("master"))
+
 
     ],
     targets: [
