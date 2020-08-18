@@ -9,6 +9,20 @@ import Foundation
 import Combine
 
 
+class jsonUploader: JsonService {
+    func upload(json: String) -> AnyPublisher<String, JsonServiceError> {
+        jsonService.upload(json: json)
+    }
+    
+    var jsonService: JsonService
+    
+    init(using service: JsonService) {
+        self.jsonService = service
+    }
+    
+    
+}
+
 struct JsonBin: JsonService {
     private var secretKey = "$2b$10$s/jQICyINYMma.iRpSB8TeWlfgmq9sRvPIqQ.PUilT3sQznJK/W5S"
   func upload(json: String) -> AnyPublisher<String, JsonServiceError> {
